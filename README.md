@@ -19,3 +19,22 @@ with variable expansion, typed access, and optional integration with JVM system 
 
 ## Installation
 
+Add the __JitPack__ repositroy and following  dependency to your `pom.xml`
+
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>com.github.KonstantineVashalomidze</groupId>
+        <artifactId>dotenv-loader</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+</dependencies>
+```
+
