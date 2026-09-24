@@ -8,7 +8,7 @@ import java.util.Map;
  * <p>Instances are created via {@link Dotenv#configure()}, which returns a
  * {@link DotenvBuilder} for configuring how the .env file should be located and parsed.</p>
  *
- * @author Konstantine Vashalomidze
+ * @author <a href="https://portfolio.kosta-server.org/">Konstantine Vashalomidze</a>
  */
 public class Dotenv {
     private final Map<String, String> values;
