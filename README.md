@@ -19,7 +19,7 @@ with variable expansion, typed access, and optional integration with JVM system 
 
 ## Installation
 
-Add the __JitPack__ repositroy and following  dependency to your `pom.xml`
+Add the __JitPack__ repository and following  dependency to your `pom.xml`
 
 ```xml
 <repositories>
