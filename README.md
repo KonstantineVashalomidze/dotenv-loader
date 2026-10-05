@@ -20,8 +20,8 @@ with variable expansion, typed access, and optional integration with JVM system 
 ## Installation
 
 Installation via JitPack:
-https://jitpack.io/#KonstantineVashalomidze/dotenv-loader
 
+[![](https://jitpack.io/v/KonstantineVashalomidze/ansi-styling-library.svg)](https://jitpack.io/#KonstantineVashalomidze/dotenv-loader)
 
 ## Quickstart
 
