@@ -31,7 +31,7 @@ Add the __JitPack__ repository and following  dependency to your `pom.xml`
 
 <dependencies>
     <dependency>
-        <groupId>com.github.konstantinevashalomidze</groupId>
+        <groupId>com.github.KonstantineVashalomidze</groupId>
         <artifactId>dotenv-loader</artifactId>
         <version>1.0.0</version>
     </dependency>
