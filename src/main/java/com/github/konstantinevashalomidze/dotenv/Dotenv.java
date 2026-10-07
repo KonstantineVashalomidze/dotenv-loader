@@ -1,21 +1,23 @@
 package com.github.konstantinevashalomidze.dotenv;
 
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 import java.util.Map;
 
 /**
- * Immutable, loaded environment configuration produced by {@link DotenvBuilder#load()}.
+ * Immutable, loaded environment configuration produced by {@link DotenvLoader#load()}.
  *
- * <p>Instances are created via {@link Dotenv#configure()}, which returns a
+ * <p>Instances are created via {@link DotenvLoader#load()}, which returns a
  * {@link DotenvBuilder} for configuring how the .env file should be located and parsed.</p>
  *
  * @author <a href="https://portfolio.kosta-server.org/">Konstantine Vashalomidze</a>
  */
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class Dotenv {
-    private final Map<String, String> values;
 
-    Dotenv(Map<String, String> values) {
-        this.values = values;
-    }
+    private final Map<String, String> values;
 
     /**
      * Retrieves value by specified key
@@ -23,7 +25,7 @@ public class Dotenv {
      * @return value associated with key
      * @throws DotenvException if key is not present in the loaded configuration
      */
-    public String get(String key) {
+    public @NonNull String get(String key) {
         if (values.containsKey(key)) {
             return values.get(key);
         } else {
@@ -31,11 +33,7 @@ public class Dotenv {
         }
     }
 
-    public static DotenvBuilder configure() {
-        return new DotenvBuilder();
-    }
-
-    public String get(String key, String defaultValue) {
+    public @NonNull String get(String key, String defaultValue) {
         return values.getOrDefault(key, defaultValue);
     }
 
