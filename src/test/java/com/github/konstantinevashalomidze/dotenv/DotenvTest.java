@@ -17,34 +17,46 @@ class DotenvTest {
         System.clearProperty("DB_HOST");
     }
 
-
     @Test
     void getThrowsWhenKeyMissing(@TempDir Path tempDir) throws IOException {
         Path envFile = tempDir.resolve(".env");
         Files.writeString(envFile, "THERE_IS_NO_SUCH_KEY=null\n");
 
-        Dotenv dotenv = Dotenv.configure()
+        DotenvConfiguration configuration = DotenvConfiguration.builder()
                 .directory(tempDir.toString())
                 .filename(".env")
-                .load();
+                .build();
+
+        Dotenv dotenv = DotenvLoader.load(configuration);
 
         assertThrows(DotenvException.class, () -> dotenv.get("THERE_IS_SUCH_KEY"));
     }
 
     @Test
     void ignoreIfMissingReturnsEmptyConfig(@TempDir Path tempDir) {
-        Dotenv dotenv = Dotenv.configure()
+        DotenvConfiguration configuration = DotenvConfiguration.builder()
                 .ignoreIfMissing()
                 .directory(tempDir.toString())
                 .filename(".env")
-                .load();
+                .build();
+
+        Dotenv dotenv = DotenvLoader.load(configuration);
 
         assertThrows(DotenvException.class, () -> dotenv.get("ANYTHING"));
     }
 
     @Test
     void missingFileThrowsWhenNotIgnored(@TempDir Path tempDir) {
-        assertThrows(DotenvException.class, () -> Dotenv.configure().directory(tempDir.toString()).filename(".env").load());
+        assertThrows(
+                DotenvException.class,
+                () -> {
+                    final DotenvConfiguration configuration = DotenvConfiguration.builder()
+                            .directory(tempDir.toString())
+                            .filename(".env")
+                            .build();
+                    DotenvLoader.load(configuration);
+                }
+        );
     }
 
     @Test
@@ -52,10 +64,12 @@ class DotenvTest {
         Path envFile = tempDir.resolve(".env");
         Files.writeString(envFile, "PORT=5432\nDEBUG=true\n");
 
-        Dotenv dotenv = Dotenv.configure()
-                        .directory(tempDir.toString())
-                                .filename(".env")
-                                        .load();
+        DotenvConfiguration configuration = DotenvConfiguration.builder()
+                .directory(tempDir.toString())
+                .filename(".env")
+                .build();
+
+        Dotenv dotenv = DotenvLoader.load(configuration);
 
         assertEquals(5432, dotenv.getInt("PORT"));
         assertTrue(dotenv.getBoolean("DEBUG"));
@@ -66,10 +80,12 @@ class DotenvTest {
         Path envFile = tempDir.resolve(".env");
         Files.writeString(envFile, "PORT=notanumber\n");
 
-        Dotenv dotenv = Dotenv.configure()
+        DotenvConfiguration configuration = DotenvConfiguration.builder()
                 .directory(tempDir.toString())
                 .filename(".env")
-                .load();
+                .build();
+
+        Dotenv dotenv = DotenvLoader.load(configuration);
 
         assertThrows(DotenvException.class, () -> dotenv.getInt("PORT"));
     }
@@ -79,13 +95,17 @@ class DotenvTest {
         Path envFile = tempDir.resolve(".env");
         Files.writeString(envFile, "DB_HOST=localhost\n");
 
-        assertThrows(DotenvException.class, () -> {
-            Dotenv dotenv = Dotenv.configure()
-                    .directory(tempDir.toString())
-                    .filename(".env")
-                    .required("DB_PASSWORD")
-                    .load();
-        });
+        assertThrows(
+                DotenvException.class, () -> {
+                    DotenvConfiguration configuration = DotenvConfiguration.builder()
+                            .directory(tempDir.toString())
+                            .filename(".env")
+                            .required("DB_PASSWORD")
+                            .build();
+
+                    DotenvLoader.load(configuration);
+                }
+        );
     }
 
 
@@ -96,13 +116,17 @@ class DotenvTest {
 
         System.setProperty("DB_HOST", "fromsystem");
 
-        assertThrows(DotenvException.class, () -> {
-            Dotenv dotenv = Dotenv.configure()
-                    .directory(tempDir.toString())
-                    .filename(".env")
-                    .systemProperties()
-                    .load();
-        });
+        assertThrows(
+                DotenvException.class, () -> {
+                    DotenvConfiguration configuration = DotenvConfiguration.builder()
+                            .directory(tempDir.toString())
+                            .filename(".env")
+                            .systemProperties()
+                            .build();
+
+                    DotenvLoader.load(configuration);
+                }
+        );
     }
 
     @Test
@@ -112,14 +136,16 @@ class DotenvTest {
 
         System.setProperty("DB_HOST", "fromsystem");
 
-        Dotenv dotenv = Dotenv.configure()
+        DotenvConfiguration configuration = DotenvConfiguration.builder()
                 .directory(tempDir.toString())
                 .filename(".env")
                 .systemProperties()
                 .onConflict("DB_HOST", ConflictPolicy.OVERRIDE)
-                .load();
+                .build();
 
-        assertEquals("fromenv",  dotenv.get("DB_HOST"));
+        Dotenv dotenv = DotenvLoader.load(configuration);
+
+        assertEquals("fromenv", dotenv.get("DB_HOST"));
         assertEquals(System.getProperty("DB_HOST"), dotenv.get("DB_HOST"));
     }
 
@@ -130,16 +156,16 @@ class DotenvTest {
 
         System.setProperty("DB_HOST", "fromsystem");
 
-        Dotenv dotenv = Dotenv.configure()
+        DotenvConfiguration configuration = DotenvConfiguration.builder()
                 .directory(tempDir.toString())
                 .filename(".env")
                 .systemProperties()
                 .onConflict("DB_HOST", ConflictPolicy.PRESERVE)
-                .load();
+                .build();
+
+        Dotenv dotenv = DotenvLoader.load(configuration);
 
         assertEquals("fromsystem", System.getProperty("DB_HOST"));
         assertEquals("fromenv", dotenv.get("DB_HOST"));
     }
-
-
 }
