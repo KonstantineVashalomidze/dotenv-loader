@@ -39,6 +39,54 @@ public class Dotenv {
         return values.getOrDefault(key, defaultValue);
     }
 
+    public int getInt(String key, int defaultValue) {
+        if (!values.containsKey(key)) {
+            return defaultValue;
+        }
+
+        return getInt(key);
+    }
+
+    public boolean getBoolean(String key, boolean defaultValue) {
+        if (!values.containsKey(key)) {
+            return defaultValue;
+        }
+        return getBoolean(key);
+    }
+
+    public double getDouble(String key, double defaultValue) {
+        if (!values.containsKey(key)) {
+            return defaultValue;
+        }
+        return getDouble(key);
+    }
+
+    public float getFloat(String key, float defaultValue) {
+        if (!values.containsKey(key)) {
+            return defaultValue;
+        }
+        return getFloat(key);
+    }
+    public long getLong(String key, long defaultValue) {
+        if (!values.containsKey(key)) {
+            return defaultValue;
+        }
+        return getLong(key);
+    }
+    public short  getShort(String key, short defaultValue) {
+        if (!values.containsKey(key)) {
+            return defaultValue;
+        }
+        return getShort(key);
+    }
+    public byte getByte(String key, byte defaultValue) {
+        if (!values.containsKey(key)) {
+            return defaultValue;
+        }
+        return getByte(key);
+    }
+
+
     /**
      * Retrieves int value by specified key
      * @param key for value retrieval
