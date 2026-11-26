@@ -1,5 +1,7 @@
 package com.github.konstantinevashalomidze.dotenv;
 
+import lombok.NonNull;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,7 +13,8 @@ import java.util.Map;
  * @author Konstantine Vashalomidze
  */
 public class DotenvParser {
-    public Map<String, String> parse(Path filePah) throws IOException {
+
+    public @NonNull Map<String, String> parse(Path filePah) throws IOException {
         List<String> lines = Files.readAllLines(filePah);
         Map<String, String> parsedResult = new LinkedHashMap<>();
         for (String line : lines) {
@@ -49,7 +52,7 @@ public class DotenvParser {
         }
     }
 
-    private String processValue(String rawValue, Map<String, String> parsedResult) {
+    private @NonNull String processValue(String rawValue, Map<String, String> parsedResult) {
         if (rawValue.startsWith("\"") && rawValue.endsWith("\"")) {
             return processDoubleQuotes(rawValue, parsedResult);
         } else if (rawValue.startsWith("'") && rawValue.endsWith("'")) {
@@ -59,7 +62,7 @@ public class DotenvParser {
         }
     }
 
-    private String processDoubleQuotes(String rawValue, Map<String, String> parsedResult) {
+    private @NonNull String processDoubleQuotes(String rawValue, Map<String, String> parsedResult) {
         if (rawValue.length() < 2) {
             throw new DotenvException("Malformed value: " + rawValue);
         }
@@ -89,14 +92,14 @@ public class DotenvParser {
         return expandVariables(sb.toString(), parsedResult);
     }
 
-    private String processSingleQuotes(String rawValue) {
+    private @NonNull String processSingleQuotes(String rawValue) {
         if (rawValue.length() < 2) {
             throw new DotenvException("Malformed value: " + rawValue);
         }
         return rawValue.substring(1, rawValue.length() - 1);
     }
 
-    private String expandVariables(String value, Map<String, String> alreadyParsed) {
+    private @NonNull String expandVariables(String value, Map<String, String> alreadyParsed) {
         StringBuilder valueBuilder = new StringBuilder();
         StringBuilder key = new StringBuilder();
         int readingKey = -1;
